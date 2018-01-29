@@ -5,7 +5,7 @@
   var CHEK = ['12:00', '13:00', '14:00'];
   var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var HOMES_COUNT = 8;
-  var START_PRACE = 1000;
+  var START_PRICE = 1000;
   var START_ROOM = 1;
   var START_X = 300;
   var START_Y = 100;
@@ -16,14 +16,14 @@
   var dialogPanel = offerDialog.querySelector('.dialog__panel');
 
   function createNumber(n) {
-    return Math.floor(Math.random() * n);
+    return Math.round(Math.random() * (n));
   }
 
   function createHome() {
     for (var i = 0; i < HOMES_COUNT; i++) {
       var ava = i + 1;
 
-      var location = {
+      var locationOne = {
         x: START_X + createNumber(600),
         y: START_Y + createNumber(400)
       };
@@ -34,42 +34,39 @@
         },
         offer: {
           title: TITLES[i],
-          address: location.x + ', ' + location.y,
-          price: START_PRACE + createNumber(999000),
-          type: TYPES[createNumber(TYPES.length)],
+          address: locationOne.x + ', ' + locationOne.y,
+          price: START_PRICE + createNumber(999000),
+          type: TYPES[createNumber(TYPES.length - 1)],
           rooms: START_ROOM + createNumber(4),
           guests: createNumber(10),
-          checkin: CHEK[createNumber(CHEK.length)],
-          checkout: CHEK[createNumber(CHEK.length)],
-          features: FEATURES.slice(0, createNumber(FEATURES.length)),
+          checkin: CHEK[createNumber(CHEK.length - 1)],
+          checkout: CHEK[createNumber(CHEK.length - 1)],
+          features: FEATURES.slice(0, createNumber(FEATURES.length - 1)),
           description: '',
           photos: []
         },
         location: {
-          x: location.x,
-          y: location.y
+          x: locationOne.x,
+          y: locationOne.y
         }
       };
-    }
-    return homes;
-  }
+    };
+  };
 
   createHome();
 
-  console.log(homes);
-
-  var renderHome1 = function (home) {
+  function renderHome1(home) {
     var place = '<div class="pin" style="left:' + (home.location.x - 28) + 'px; top:' + (home.location.y - 75) + 'px"><img src="' + home.author.avatar + '" class="rounded" width="40" height="40"></div>';
 
     return place;
   };
 
-  var renderHome2 = function (home) {
+  function renderHome2(home) {
     var oneHome = lodgeTemplate.cloneNode(true);
 
     oneHome.querySelector('.lodge__title').textContent = home.offer.title;
     oneHome.querySelector('.lodge__address').textContent = home.offer.address;
-    oneHome.querySelector('.lodge__price').textContent = home.offer.price + '&#x20bd;/ночь';
+    oneHome.querySelector('.lodge__price').textContent = home.offer.price + ' P/ночь';
 
     switch (home.offer.type) {
       case 'flat':
@@ -87,7 +84,7 @@
     oneHome.querySelector('.lodge__checkin-time').textContent = 'Заезд после ' + home.offer.checkin + ', выезд до ' + home.offer.checkout;
 
     for (var i = 0; i < home.offer.features.length; i++) {
-      oneHome.querySelector('.lodge__features').innerHTML = '<span class = feature__image feature__image--' + home.offer.features[i] + '></span>';
+      oneHome.querySelector('.lodge__features').insertAdjacentHTML('beforeend', '<span class = "feature__image feature__image--' + home.offer.features[i] + '"></span>');
     }
 
     oneHome.querySelector('.lodge__description').textContent = home.offer.description;
@@ -95,10 +92,17 @@
     return oneHome;
   };
 
+  var fragment = document.createDocumentFragment();
+
   for (var i = 0; i < homes.length; i++) {
-    tokyoPin.insertAdjacentHTML('beforeend', renderHome1(homes[i]));
+    var element = document.createElement('div');
+    element.innerHTML = renderHome1(homes[i]);
+    fragment.appendChild(element);
   }
-  console.log(renderHome2(homes[0]));
+
+  tokyoPin.appendChild(fragment);
+
+  //console.log(element);
 
   offerDialog.replaceChild(renderHome2(homes[0]), dialogPanel);
 })();
