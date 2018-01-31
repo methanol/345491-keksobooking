@@ -9,11 +9,18 @@
   var START_ROOM = 1;
   var START_X = 300;
   var START_Y = 100;
+  var ESC_KEYCODE = 27;
+  var ENTER_KEYCODE = 13;
+
   var homes = [];
   var lodgeTemplate = document.querySelector('#lodge-template').content;
   var tokyoPin = document.querySelector('.tokyo__pin-map');
   var offerDialog = document.querySelector('#offer-dialog');
   var dialogPanel = offerDialog.querySelector('.dialog__panel');
+
+  var dialog = document.querySelector('.dialog');
+  var pinPrev = 0;
+  var dialogClose = document.querySelector('.dialog__close');
 
   function createNumber(n) {
     return Math.round(Math.random() * (n));
@@ -56,7 +63,7 @@
   createHome();
 
   function renderHome1(home) {
-    var place = '<div class="pin" style="left:' + (home.location.x - 28) + 'px; top:' + (home.location.y - 75) + 'px"><img src="' + home.author.avatar + '" class="rounded" width="40" height="40"></div>';
+    var place = '<div class="pin" tabindex="0" style="left:' + (home.location.x - 28) + 'px; top:' + (home.location.y - 75) + 'px"><img src="' + home.author.avatar + '" class="rounded" width="40" height="40"></div>';
 
     return place;
   };
@@ -88,7 +95,7 @@
     }
 
     oneHome.querySelector('.lodge__description').textContent = home.offer.description;
-    offerDialog.querySelector('.dialog__title').src = home.author.avatar;
+    offerDialog.querySelector('.dialog__title').children[0].src = home.author.avatar;
     return oneHome;
   };
 
@@ -102,7 +109,65 @@
 
   tokyoPin.appendChild(fragment);
 
-  //console.log(element);
+  var pinStreet = document.querySelectorAll('.pin');
 
-  offerDialog.replaceChild(renderHome2(homes[0]), dialogPanel);
+  function renderHome3(lane) {
+    for (var i = 0; i < lane.length; i++) {
+      if (pinPrev == lane[i]) {
+        offerDialog.replaceChild(renderHome2(homes[(i-1)]), offerDialog.children[1]);
+      }
+    }
+  }
+
+  tokyoPin.addEventListener('click', function(evt) {
+    if (pinPrev) {
+      pinPrev.classList.remove('pin--active');
+    }
+
+    evt.target.parentElement.classList.add('pin--active');
+    pinPrev = evt.target.parentElement;
+    dialog.classList.remove('hidden');
+
+    renderHome3(pinStreet);
+
+    document.addEventListener('keydown', function(evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        closeHome();
+      }
+    });
+  });
+
+  tokyoPin.addEventListener('keydown', function(evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      if (pinPrev) {
+        pinPrev.classList.remove('pin--active');
+      }
+
+      evt.target.classList.add('pin--active');
+      pinPrev = evt.target;
+      dialog.classList.remove('hidden');
+
+      renderHome3(pinStreet);
+
+      document.addEventListener('keydown', function(evt) {
+        if (evt.keyCode === ESC_KEYCODE) {
+          closeHome();
+        }
+      });
+    }
+  });
+
+  dialogClose.addEventListener('click', closeHome);
+
+  dialogClose.addEventListener('keydown', function(evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      closeHome();
+    }
+  });
+
+  function closeHome() {
+    dialog.classList.add('hidden');
+    pinPrev.classList.remove('pin--active');
+  }
+
 })();
