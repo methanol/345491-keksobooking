@@ -22,99 +22,14 @@
   var pinPrev = 0;
   var dialogClose = document.querySelector('.dialog__close');
 
-  function createNumber(n) {
-    return Math.round(Math.random() * (n));
-  }
-
-  function createHome() {
-    for (var i = 0; i < HOMES_COUNT; i++) {
-      var ava = i + 1;
-
-      var locationOne = {
-        x: START_X + createNumber(600),
-        y: START_Y + createNumber(400)
-      };
-
-      homes[i] = {
-        author: {
-          avatar: 'img/avatars/user0' + ava + '.png',
-        },
-        offer: {
-          title: TITLES[i],
-          address: locationOne.x + ', ' + locationOne.y,
-          price: START_PRICE + createNumber(999000),
-          type: TYPES[createNumber(TYPES.length - 1)],
-          rooms: START_ROOM + createNumber(4),
-          guests: createNumber(10),
-          checkin: CHEK[createNumber(CHEK.length - 1)],
-          checkout: CHEK[createNumber(CHEK.length - 1)],
-          features: FEATURES.slice(0, createNumber(FEATURES.length - 1)),
-          description: '',
-          photos: []
-        },
-        location: {
-          x: locationOne.x,
-          y: locationOne.y
-        }
-      };
-    };
-  };
-
-  createHome();
-
-  function renderHome1(home) {
-    var place = '<div class="pin" tabindex="0" style="left:' + (home.location.x - 28) + 'px; top:' + (home.location.y - 75) + 'px"><img src="' + home.author.avatar + '" class="rounded" width="40" height="40"></div>';
-
-    return place;
-  };
-
-  function renderHome2(home) {
-    var oneHome = lodgeTemplate.cloneNode(true);
-
-    oneHome.querySelector('.lodge__title').textContent = home.offer.title;
-    oneHome.querySelector('.lodge__address').textContent = home.offer.address;
-    oneHome.querySelector('.lodge__price').textContent = home.offer.price + ' P/ночь';
-
-    switch (home.offer.type) {
-      case 'flat':
-        oneHome.querySelector('.lodge__type').textContent = 'Квартира';
-        break;
-      case 'house':
-        oneHome.querySelector('.lodge__type').textContent = 'Дом';
-        break;
-      case 'bungalo':
-        oneHome.querySelector('.lodge__type').textContent = 'Бунгало';
-        break;
-    }
-
-    oneHome.querySelector('.lodge__rooms-and-guests').textContent = 'Для ' + home.offer.guests + ' гостей в ' + home.offer.rooms + ' комнатах';
-    oneHome.querySelector('.lodge__checkin-time').textContent = 'Заезд после ' + home.offer.checkin + ', выезд до ' + home.offer.checkout;
-
-    for (var i = 0; i < home.offer.features.length; i++) {
-      oneHome.querySelector('.lodge__features').insertAdjacentHTML('beforeend', '<span class = "feature__image feature__image--' + home.offer.features[i] + '"></span>');
-    }
-
-    oneHome.querySelector('.lodge__description').textContent = home.offer.description;
-    offerDialog.querySelector('.dialog__title').children[0].src = home.author.avatar;
-    return oneHome;
-  };
-
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < homes.length; i++) {
-    var element = document.createElement('div');
-    element.innerHTML = renderHome1(homes[i]);
-    fragment.appendChild(element);
-  }
-
-  tokyoPin.appendChild(fragment);
+  window.data.createHome();
 
   var pinStreet = document.querySelectorAll('.pin');
 
   function renderHome3(lane) {
     for (var i = 0; i < lane.length; i++) {
       if (pinPrev == lane[i]) {
-        offerDialog.replaceChild(renderHome2(homes[(i-1)]), offerDialog.children[1]);
+        offerDialog.replaceChild(window.card.renderHome2(window.data.homes[(i-1)]), offerDialog.children[1]);
       }
     }
   }
@@ -169,77 +84,5 @@
     dialog.classList.add('hidden');
     pinPrev.classList.remove('pin--active');
   }
-
-  var goIn = document.getElementById('timein');
-  var goOut = document.getElementById('timeout');
-  var typeHome = document.getElementById('type');
-  var priceHome = document.getElementById('price');
-  var roomNumber = document.getElementById('room_number');
-  var homeCapacity = document.getElementById('capacity');
-  var mainForm = document.querySelector('.notice__form');
-  var submitForm = document.querySelector('.form__submit');
-  var inputs = mainForm.querySelectorAll('input');
-  var errorState = 0;
-
-  goIn.addEventListener('change', function() {
-    goOut.value = goIn.value;
-  });
-
-  typeHome.addEventListener('change', function() {
-    switch (typeHome.value) {
-      case 'flat':
-        priceHome.min = 1000;
-        break;
-      case 'bungalo':
-        priceHome.min = 0;
-        break;
-      case 'house':
-        priceHome.min = 5000;
-        break;
-      case 'palace':
-        priceHome.min = 10000;
-        break;
-    }
-  });
-
-  roomNumber.addEventListener('change', function() {
-    switch (roomNumber.value) {
-      case '1':
-        homeCapacity.children[0].disabled = true;
-        homeCapacity.children[1].disabled = true;
-        homeCapacity.children[2].selected = true;
-        homeCapacity.children[3].disabled = true;
-        break;
-      case '2':
-        homeCapacity.children[0].disabled = true;
-        homeCapacity.children[1].disabled = false;
-        homeCapacity.children[2].selected = true;
-        homeCapacity.children[3].disabled = true;
-        break;
-      case '3':
-        homeCapacity.children[0].disabled = false;
-        homeCapacity.children[1].disabled = false;
-        homeCapacity.children[2].selected = true;
-        homeCapacity.children[3].disabled = true;
-        break;
-      case '100':
-        homeCapacity.children[0].disabled = true;
-        homeCapacity.children[1].disabled = true;
-        homeCapacity.children[2].disabled = true;
-        homeCapacity.children[3].selected= true;
-        break;
-    }
-  });
-
-  submitForm.addEventListener('click', function(evt) {
-    errorState = 0;
-    for (var i = 0; i < inputs.length; i++) {
-      if (inputs[i].checkValidity() == false) {
-        inputs[i].style.border = '3px dashed red';
-        errorState = 1;
-      }
-    }
-
-  });
 
 })();
