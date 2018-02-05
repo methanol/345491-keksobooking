@@ -9,10 +9,12 @@
   var dialogClose = document.querySelector('.dialog__close');
   var pinStreet = document.querySelectorAll('.pin');
 
+  offerDialog.replaceChild(window.card.renderHome2(window.data.homes[0]), offerDialog.children[1]);
+
   function renderHome3(lane) {
-    for (var i = 0; i < lane.length; i++) {
+    for (var i = 1; i < lane.length; i++) {
       if (pinPrev == lane[i]) {
-        offerDialog.replaceChild(window.card.renderHome2(window.data.homes[(i-1)]), offerDialog.children[1]);
+        window.showCard(window.data.homes[(i-1)]);
       }
     }
   }
@@ -91,8 +93,6 @@
       x: moveEvt.pageX,
       y: moveEvt.pageY
     };
-
-    console.log(mainPin.parentElement.offsetWidth);
 
     formAdress.value = 'x: ' + (startCoord.x + 20) + ' y: ' + (startCoord.y + 44);
 
