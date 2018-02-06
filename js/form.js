@@ -11,65 +11,59 @@
   var inputs = mainForm.querySelectorAll('input');
   var errorState = 0;
 
-  function syncTime(first, second) {
-    first.addEventListener('change', function() {
-      second.value = first.value;
-    });
+  function syncTime() {
+    goOut.value = goIn.value;
   };
 
   function syncPrice() {
-    typeHome.addEventListener('change', function() {
-      switch (typeHome.value) {
-        case 'flat':
-          priceHome.min = 1000;
-          break;
-        case 'bungalo':
-          priceHome.min = 0;
-          break;
-        case 'house':
-          priceHome.min = 5000;
-          break;
-        case 'palace':
-          priceHome.min = 10000;
-          break;
-      }
-    });
+    switch (typeHome.value) {
+      case 'flat':
+        priceHome.min = 1000;
+        break;
+      case 'bungalo':
+        priceHome.min = 0;
+        break;
+      case 'house':
+        priceHome.min = 5000;
+        break;
+      case 'palace':
+        priceHome.min = 10000;
+        break;
+    }
   };
 
   function syncGuest() {
-    roomNumber.addEventListener('change', function() {
-      switch (roomNumber.value) {
-        case '1':
-          homeCapacity.children[0].disabled = true;
-          homeCapacity.children[1].disabled = true;
-          homeCapacity.children[2].selected = true;
-          homeCapacity.children[3].disabled = true;
-          break;
-        case '2':
-          homeCapacity.children[0].disabled = true;
-          homeCapacity.children[1].disabled = false;
-          homeCapacity.children[2].selected = true;
-          homeCapacity.children[3].disabled = true;
-          break;
-        case '3':
-          homeCapacity.children[0].disabled = false;
-          homeCapacity.children[1].disabled = false;
-          homeCapacity.children[2].selected = true;
-          homeCapacity.children[3].disabled = true;
-          break;
-        case '100':
-          homeCapacity.children[0].disabled = true;
-          homeCapacity.children[1].disabled = true;
-          homeCapacity.children[2].disabled = true;
-          homeCapacity.children[3].selected= true;
-          break;
-      }
-    });
+    switch (roomNumber.value) {
+      case '1':
+        homeCapacity.children[0].disabled = true;
+        homeCapacity.children[1].disabled = true;
+        homeCapacity.children[2].selected = true;
+        homeCapacity.children[3].disabled = true;
+        break;
+      case '2':
+        homeCapacity.children[0].disabled = true;
+        homeCapacity.children[1].disabled = false;
+        homeCapacity.children[2].selected = true;
+        homeCapacity.children[3].disabled = true;
+        break;
+      case '3':
+        homeCapacity.children[0].disabled = false;
+        homeCapacity.children[1].disabled = false;
+        homeCapacity.children[2].selected = true;
+        homeCapacity.children[3].disabled = true;
+        break;
+      case '100':
+        homeCapacity.children[0].disabled = true;
+        homeCapacity.children[1].disabled = true;
+        homeCapacity.children[2].disabled = true;
+        homeCapacity.children[3].selected= true;
+        break;
+    }
   };
 
-  window.synchronizeFields(syncTime(goIn, goOut));
-  window.synchronizeFields(syncPrice);
-  window.synchronizeFields(syncGuest);
+  window.synchronizeFields(goIn, syncTime);
+  window.synchronizeFields(typeHome, syncPrice);
+  window.synchronizeFields(roomNumber, syncGuest);
 
   /*goIn.addEventListener('change', function() {
     goOut.value = goIn.value;

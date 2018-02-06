@@ -1,10 +1,12 @@
 'use strict';
 (function () {
 
-  window.synchronizeFields = function(instruction) {
-    if (typeof instruction === 'function') {
-      instruction();
-    }
+  window.synchronizeFields = function(mean1, instruction) {
+    mean1.addEventListener('change', function() {
+      if (typeof instruction === 'function') {
+        instruction();
+      }
+    });
   };
 
 })();
