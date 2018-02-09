@@ -18,6 +18,35 @@
 
   window.data = {
     homes: [],
+    successHandler: function(data) {
+      for (var i = 0; i < data.length; i++) {
+
+        window.data.homes[i] = {
+          author: {
+            avatar: data[i].author.avatar,
+          },
+          offer: {
+            title: data[i].offer.title,
+            address: data[i].offer.address,
+            price: data[i].offer.price,
+            type: data[i].offer.type,
+            rooms: data[i].offer.rooms,
+            guests: data[i].offer.guests,
+            checkin: data[i].offer.checkin,
+            checkout: data[i].offer.checkout,
+            features: data[i].offer.features,
+            description: data[i].offer.description,
+            photos: []
+          },
+          location: {
+            x: data[i].location.x,
+            y: data[i].location.y
+          }
+        };
+      };
+      console.log(window.data.homes.length);
+      console.log(window.data.homes);
+    },
     createHome: function() {
       for (var i = 0; i < HOMES_COUNT; i++) {
         var ava = i + 1;
@@ -52,7 +81,18 @@
       };
     },
     ESC_KEYCODE: 27,
-    ENTER_KEYCODE: 13
+    ENTER_KEYCODE: 13,
+    errorHandler: function (errorMessage) {
+      var node = document.createElement('div');
+      node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: silver; color:green;';
+      node.style.position = 'absolute';
+      node.style.left = 0;
+      node.style.right = 0;
+      node.style.fontSize = '35px';
+
+      node.textContent = errorMessage;
+      document.body.insertAdjacentElement('afterbegin', node);
+    }
   };
 
 })();

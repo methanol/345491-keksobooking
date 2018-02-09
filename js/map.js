@@ -9,6 +9,9 @@
   var dialogClose = document.querySelector('.dialog__close');
   var pinStreet = document.querySelectorAll('.pin');
 
+  console.log(window.data.homes);
+  console.log(window.data.homes.length);
+
   offerDialog.replaceChild(window.card.renderHome2(window.data.homes[0]), offerDialog.children[1]);
 
   function renderHome3(lane) {
