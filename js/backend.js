@@ -35,7 +35,6 @@
     },
     load: function (onLoad, onError) {
       var xhr = setup(onLoad, onError);
-
       xhr.open('GET', SERVER_URL + '/data');
       xhr.send();
     }

@@ -9,8 +9,6 @@
     return place;
   };
 
-  window.backend.load(window.data.successHandler, window.data.errorHandler);
-
   //window.data.createHome();
 
   function addHomes (homes) {
@@ -24,6 +22,12 @@
     tokyoPin.appendChild(fragment);
   }
 
-  addHomes(window.data.homes);
+  function successHandler(data) {
+    window.data.homes = data;
+    addHomes(window.data.homes);
+    window.data.pinStreet = document.querySelectorAll('.pin');
+  };
+
+  window.backend.load(successHandler, window.data.errorHandler);
 
   })();

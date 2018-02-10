@@ -7,12 +7,10 @@
   var dialog = document.querySelector('.dialog');
   var pinPrev = 0;
   var dialogClose = document.querySelector('.dialog__close');
-  var pinStreet = document.querySelectorAll('.pin');
 
-  console.log(window.data.homes);
-  console.log(window.data.homes.length);
-
+  if (window.data.homes.length > 0) {
   offerDialog.replaceChild(window.card.renderHome2(window.data.homes[0]), offerDialog.children[1]);
+  }
 
   function renderHome3(lane) {
     for (var i = 1; i < lane.length; i++) {
@@ -31,7 +29,7 @@
     pinPrev = evt.target.parentElement;
     dialog.classList.remove('hidden');
 
-    renderHome3(pinStreet);
+    renderHome3(window.data.pinStreet);
 
     document.addEventListener('keydown', function(evt) {
       if (evt.keyCode === window.data.ESC_KEYCODE) {
@@ -50,7 +48,7 @@
       pinPrev = evt.target;
       dialog.classList.remove('hidden');
 
-      renderHome3(pinStreet);
+      renderHome3(window.data.pinStreet);
 
       document.addEventListener('keydown', function(evt) {
         if (evt.keyCode === window.data.ESC_KEYCODE) {
