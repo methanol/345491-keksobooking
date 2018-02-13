@@ -18,6 +18,7 @@
 
   window.data = {
     homes: [],
+    cloneHomes: [],
     pinStreet: [],
     createHome: function() {
       for (var i = 0; i < HOMES_COUNT; i++) {

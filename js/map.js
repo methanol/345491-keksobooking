@@ -8,14 +8,10 @@
   var pinPrev = 0;
   var dialogClose = document.querySelector('.dialog__close');
 
-  if (window.data.homes.length > 0) {
-  offerDialog.replaceChild(window.card.renderHome2(window.data.homes[0]), offerDialog.children[1]);
-  }
-
   function renderHome3(lane) {
     for (var i = 1; i < lane.length; i++) {
       if (pinPrev == lane[i]) {
-        window.showCard(window.data.homes[(i-1)]);
+        window.showCard(window.data.cloneHomes[(i-1)]);
       }
     }
   }
